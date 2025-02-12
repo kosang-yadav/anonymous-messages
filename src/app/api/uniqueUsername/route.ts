@@ -24,36 +24,47 @@ export async function GET(req: NextRequest) {
         {status : 500}
     )
 
-	const { success, error, data } = usernameQuerySchema.safeParse(queryParams);
-
-	if (!success)
+	try {
+		const { success, error, data } = usernameQuerySchema.safeParse(queryParams);
+	
+		if (!success)
+			return Response.json(
+				{
+					success: false,
+					message: error.format().username?._errors || "Invalid username",
+				},
+				{ status: 400 }
+			);
+	
+		const username = data.username;
+	    // console.log(username);
+	
+		const user = await UserModel.findOne({ username, isVerified: true });
+	
+		if (user)
+			return Response.json(
+				{
+					success: false,
+					message: "username is already taken",
+				},
+				{ status: 400 }
+			);
+	
+		return Response.json(
+			{
+				success: true,
+				message: "username is unique",
+			},
+			{ status: 200 }
+		);
+	} catch (error) {
+		console.log(error);
 		return Response.json(
 			{
 				success: false,
-				message: error.format().username?._errors || "Invalid username",
+				message: "couldn't verify whether username is unique or not with error : " + error,
 			},
 			{ status: 400 }
 		);
-
-	const username = data.username;
-    // console.log(username);
-
-	const user = await UserModel.findOne({ username, isVerified: true });
-
-	if (user)
-		return Response.json(
-			{
-				success: false,
-				message: "username is already taken",
-			},
-			{ status: 400 }
-		);
-
-	return Response.json(
-		{
-			success: true,
-			message: "username is unique",
-		},
-		{ status: 200 }
-	);
+	}
 }
