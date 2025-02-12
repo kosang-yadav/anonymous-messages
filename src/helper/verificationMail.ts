@@ -1,4 +1,4 @@
-import { apiResponseSchema } from "@/type/apiResponse";
+import { apiResponseSchema } from "@/types/apiResponse";
 import { VerificationMailTemplate } from "../../mail/verificationMailTemplate";
 import { resend } from "@/lib/resend";
 

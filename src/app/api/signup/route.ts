@@ -1,7 +1,7 @@
 import { dbConnect } from "@/lib/dbConnect";
 import UserModel from "@/model/user.model";
 import { signUpSchema } from "@/schema/signUpSchema";
-import { apiResponseSchema } from "@/type/apiResponse";
+import { apiResponseSchema } from "@/types/apiResponse";
 
 import { NextRequest } from "next/server";
 import bcrypt from "bcryptjs";
@@ -37,9 +37,8 @@ export async function POST(request: NextRequest): Promise<apiResponseSchema> {
 		const user = await UserModel.findOne({ email }).select("password");
 
 		if (user) {
-
 			//when user is found and verified already, no need to do anything
-			
+
 			if (user.isVerified)
 				return {
 					success: false,
@@ -96,7 +95,7 @@ export async function POST(request: NextRequest): Promise<apiResponseSchema> {
 				statusCode: 500,
 				message: `failed to send verification mail to ${email}`,
 			};
-			
+
 		const newUser = await UserModel.insertOne({
 			email,
 			password: hashedPassword,
