@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
 			return Response.json(
 				{
 					success: false,
-					message: "username is already taken",
+					message: `${username} is already taken`,
 				},
 				{ status: 400 }
 			);
@@ -53,7 +53,7 @@ export async function GET(req: NextRequest) {
 		return Response.json(
 			{
 				success: true,
-				message: "username is unique",
+				message: `${username} is unique.`,
 			},
 			{ status: 200 }
 		);
@@ -62,7 +62,7 @@ export async function GET(req: NextRequest) {
 		return Response.json(
 			{
 				success: false,
-				message: "couldn't verify whether username is unique or not with error : " + error,
+				message: "failed to verify username	",
 			},
 			{ status: 400 }
 		);

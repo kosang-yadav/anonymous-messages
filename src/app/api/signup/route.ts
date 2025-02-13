@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
 					$set: {
 						password: hashedPassword,
 						verifyCode,
-						verifyCodeExpiry: Date.now() + 3600,
+						verifyCodeExpiry: Date.now() + 3600000,
 					},
 				}
 			).select("password");
@@ -148,11 +148,11 @@ export async function POST(request: NextRequest) {
 			}
 		);
 	} catch (error: any) {
+		console.log(error);
 		return Response.json(
 			{
 				success: false,
-				message: `failed to sign up the user with error in catch : ${error.message}`,
-				error,
+				message: `failed to sign up the user `,
 			},
 			{ status: 500 }
 		);
