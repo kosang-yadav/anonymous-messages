@@ -4,6 +4,7 @@ import UserModel from "@/model/user.model";
 import bcrypt from "bcryptjs";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { use } from "react";
 
 export const authOptions: NextAuthOptions = {
 	providers: [
@@ -11,12 +12,12 @@ export const authOptions: NextAuthOptions = {
 			id: "credentials",
 			name: "Credentials",
 			credentials: {
-				email: { label: "Email", type: "text" },
+				identifier: { label: "Username/Email", type: "text" },
 				password: { label: "Password", type: "password" },
 			},
 			async authorize(credentials, req): Promise<any> {
 				try {
-					console.log(credentials);
+					// console.log(credentials);
 
 					//why is it solving a type error, try commenting the below line, any logic ?
 					// if (!credentials?.email || !credentials?.password) throw new Error("email or password not found");
@@ -25,12 +26,12 @@ export const authOptions: NextAuthOptions = {
 
 					const user = await UserModel.findOne({
 						$or: [
-							{ email: credentials?.email },
-							// {username : credentials?.username}
+							{ email: credentials?.identifier },
+							{username : credentials?.identifier, isVerified : true},
 							// username is not working
 						],
 					});
-
+					// console.log(user);
 					if (!user) throw new Error("user not found with email");
 
 					if (!user.isVerified) throw new Error("please verify first to login");

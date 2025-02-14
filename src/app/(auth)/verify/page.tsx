@@ -7,28 +7,44 @@ import axios from "axios";
 import { Loader2 } from "lucide-react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { codeVerificationSchema } from "@/schema/codeVerificationSchema";
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form";
+import Link from "next/link";
 
 export default function verify() {
-	const [code, setCode] = useState("");
 	const [message, setMessage] = useState("");
 	const [isVerifying, setIsVerifying] = useState(false);
 
 	const router = useRouter();
-	const searchParams = useSearchParams();
 
+	const searchParams = useSearchParams();
 	const email = searchParams.get("email");
 
-	const verificationHandler = async () => {
+	const form = useForm<z.infer<typeof codeVerificationSchema>>({
+		resolver: zodResolver(codeVerificationSchema),
+	});
+
+	async function verificationHandler(data: z.infer<typeof codeVerificationSchema>) {
 		setIsVerifying(true);
 		try {
-			const response = await axios.post("/api/verifyCode", { email, code });
+			const response = await axios.post("/api/verifyCode", { email, code : data.code });
 			if (response.data.success) {
 				setMessage(response.data.message);
 				toast({
 					title: "verification successful.",
 					description: response.data.message,
 				});
-				router.replace("/signin");
+				router.replace("/login");
 			} else {
 				setMessage(response.data.message);
 			}
@@ -44,30 +60,58 @@ export default function verify() {
 		<div className="flex justify-center items-center min-h-screen bg-gray-800">
 			<div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
 				<div className="text-center">
-					<p className="mb-4 text-3xl">enter the verification code</p>
-				</div>
-				<Input
-					type="text"
-					placeholder="Verification Code"
-					onChange={(e) => setCode(e.target.value)}
-				/>
-				{message && (
-					<p
-						className={`${message === "user verified successfully" ? "text-green-500" : "text-red-500"} `}
-					>
-						{message}
+					<h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
+						Verify your email
+					</h1>
+					<p className="mb-4 text-3xl">
+						Enter the verification code sent to your email
 					</p>
-				)}
-				<Button type="submit" onClick={verificationHandler}>
-					{isVerifying ? (
-						<>
-							<Loader2 className="animate-spin" />
-							<p>Verifying</p>
-						</>
-					) : (
-						"Verify"
-					)}
-				</Button>
+				</div>
+				<Form {...form}>
+					<form
+						onSubmit={form.handleSubmit(verificationHandler)}
+						className="space-y-8"
+					>
+						<FormField
+							control={form.control}
+							name="code"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Code</FormLabel>
+									<FormControl>
+										<Input placeholder="Verification Code" {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						{message && (
+							<p
+								className={`${message === "user verified successfully" ? "text-green-500" : "text-red-500"} `}
+							>
+								{message}
+							</p>
+						)}
+						<Button type="submit">
+							{isVerifying ? (
+								<>
+									<Loader2 className="animate-spin" />
+									Verifying
+								</>
+							) : (
+								"Verify"
+							)}
+						</Button>
+					</form>
+				</Form>
+				<div className="text-center mt-4">
+					<p>
+						code is expired?{" "}
+						<Link href="/signup" className="text-blue-600 hover:text-blue-800">
+							Sign up
+						</Link>
+					</p>
+				</div>
 			</div>
 		</div>
 	);

@@ -1,12 +1,148 @@
 "use client";
-import { useSession } from "next-auth/react";
 
-export default function Component() {
-	const { data: session, status } = useSession();
+import { signInSchema } from "@/schema/signInSchema";
 
-	if (status === "authenticated") {
-		return <p>Signed in as {session.user.email}</p>;
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Eye, Loader2 } from "lucide-react";
+import Link from "next/link";
+import { signIn } from "next-auth/react";
+
+export default function signin() {
+	const router = useRouter();
+	const { toast } = useToast();
+
+	const [showPassword, setShowPassword] = useState(false);
+
+	const [isSubmitting, setIsSubmitting] = useState(false);
+
+	const form = useForm<z.infer<typeof signInSchema>>({
+		resolver: zodResolver(signInSchema),
+		defaultValues: {
+			identifier: "",
+			password: "",
+		},
+	});
+
+	async function onSubmit(data: z.infer<typeof signInSchema>) {
+		setIsSubmitting(true);
+
+		try {
+			const response = await signIn("credentials", {
+				...data,
+				redirect: false,
+			})
+
+			// console.log(response);
+
+			if (response?.error) {
+				toast({
+					title: "sign in failed",
+					description: response.error,
+					variant: "destructive",
+				});
+			}
+
+			if(response?.url) {
+				
+				toast({
+					title: "success",
+					description: "sign in succesfully",
+				});
+				
+				router.replace(`/dashboard/${data.identifier}`);
+			}
+
+			setIsSubmitting(false);
+		} catch (error) {
+
+			toast({
+				title: "sign up failed",
+				description: "something went wrong while signing in",
+				variant: "destructive",
+			});
+
+			setIsSubmitting(false);
+		}
 	}
 
-	return <a href="/api/auth/signin" className="text-red-700 bg-white">Sign in</a>;
+	return (
+		<div className="flex justify-center items-center min-h-screen bg-gray-800">
+			<div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
+				<div className="text-center">
+					<h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
+						Join to message anonymously
+					</h1>
+					<p className="mb-4">Sign up to start your anonymous adventure</p>
+				</div>
+				<Form {...form}>
+					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+						<FormField
+							name="identifier"
+							control={form.control}
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Username / Email</FormLabel>
+									<FormControl>
+										<Input
+											{...field}
+											name="identifier"
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							name="password"
+							control={form.control}
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Password</FormLabel>
+									<FormControl>
+										<Input type="password" {...field} name="password" />
+										{/* <i><Eye/></i> */}
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<Button type="submit">
+							{isSubmitting ? (
+								<>
+									<Loader2 className="animate-spin" />
+									<p>Submitting</p>
+								</>
+							) : (
+								"Submit"
+							)}
+						</Button>
+					</form>
+				</Form>
+				<div className="text-center mt-4">
+					<p>
+						Not a member?{" "}
+						<Link href="/signup" className="text-blue-600 hover:text-blue-800">
+							Sign up
+						</Link>
+					</p>
+				</div>
+			</div>
+		</div>
+	);
 }
