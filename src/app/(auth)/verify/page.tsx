@@ -32,6 +32,9 @@ export default function verify() {
 
 	const form = useForm<z.infer<typeof codeVerificationSchema>>({
 		resolver: zodResolver(codeVerificationSchema),
+		defaultValues: {
+			code: "",
+		}
 	});
 
 	async function verificationHandler(data: z.infer<typeof codeVerificationSchema>) {

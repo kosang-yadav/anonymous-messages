@@ -29,6 +29,7 @@ export default function signin() {
 
 	const [showPassword, setShowPassword] = useState(false);
 
+	const [passwordMsg, setpasswordMsg] = useState("");
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const form = useForm<z.infer<typeof signInSchema>>({
@@ -41,6 +42,7 @@ export default function signin() {
 
 	async function onSubmit(data: z.infer<typeof signInSchema>) {
 		setIsSubmitting(true);
+		setpasswordMsg("");
 
 		try {
 			const response = await signIn("credentials", {
@@ -48,9 +50,11 @@ export default function signin() {
 				redirect: false,
 			})
 
-			// console.log(response);
+			console.log(response);
 
 			if (response?.error) {
+				
+				setpasswordMsg(response.error === "Error: wrong password" ? "wrong password" : "user not found, please sign up");
 				toast({
 					title: "sign in failed",
 					description: response.error,
@@ -59,13 +63,12 @@ export default function signin() {
 			}
 
 			if(response?.url) {
-				
 				toast({
 					title: "success",
 					description: "sign in succesfully",
 				});
 				
-				router.replace(`/dashboard/${data.identifier}`);
+				// router.replace(`/dashboard/${data.identifier}`);
 			}
 
 			setIsSubmitting(false);
@@ -122,6 +125,7 @@ export default function signin() {
 								</FormItem>
 							)}
 						/>
+						{passwordMsg && <p className="text-red-600">{passwordMsg}</p>}
 						<Button type="submit">
 							{isSubmitting ? (
 								<>
