@@ -14,26 +14,26 @@ export const Navbar = () => {
 
 	return (
 		<nav className="p-4 md:p-6 shadow-md bg-gray-900 text-white">
-			<div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
+			<div className="container mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
 				<a href="#" className="text-xl font-bold mb-4 md:mb-0">
 					anonymous messages
 				</a>
-				<span>Welcome {user?.username || session?.user?.email}</span>
+				<span>Welcome back, <span className="font-bold text-xl">{user?.username || session?.user?.email}</span></span>
 				{session ? (
 					<Button
 						onClick={() => signOut()}
-						className="w-full md:w-auto bg-slate-100 text-black"
+						className="w-full sm:w-auto bg-slate-100 text-black text-md"
 						variant="outline"
 					>
-						Sign Out
+						LogOut
 					</Button>
 				) : (
 					<Link href={"./login"}>
 						<Button
-							className="w-full md:w-auto bg-slate-100 text-black"
+							className="w-full sm:w-auto bg-slate-100 text-black"
 							variant={"outline"}
 						>
-							Log In
+							LogIn
 						</Button>
 					</Link>
 				)}

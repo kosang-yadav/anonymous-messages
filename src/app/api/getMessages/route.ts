@@ -1,18 +1,31 @@
 import mongoose from "mongoose";
 import { NextRequest } from "next/server";
 
-import { getUserIdByServerSession } from "../acceptingMessage/route";
+// import { getUserIdByServerSession } from "../acceptingMessages/route";
+
 import { dbConnect } from "@/lib/dbConnect";
 import UserModel from "@/model/user.model";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]/authOption";
 
 export async function GET(req: NextRequest) {
 	await dbConnect();
 
-	const id = await getUserIdByServerSession();
-	if (typeof id !== "string") return id;
+	// const id = await getUserIdByServerSession();
+	const session = await getServerSession(authOptions);
+	// const User = session?.user;
+	// console.log(session);
+	// if (typeof id !== "string") return Response.json(
+	// 	{
+	// 		success: false,
+	// 		message:
+	// 			"user not found from session, please login again",
+	// 	},
+	// 	{ status: 500 }
+	// ); ;
 
 	try {
-		const userId = new mongoose.Types.ObjectId(id);
+		const userId = new mongoose.Types.ObjectId(session?.user?._id);
 
 		const user = await UserModel.aggregate([
 			{
@@ -31,20 +44,28 @@ export async function GET(req: NextRequest) {
 			},
 		]);
 
-		if (!user || user.length === 0)
+		// console.log(user);
+		if (!user)
 			return Response.json(
 				{
 					success: false,
-					message:
-						"something went wrong while fetching sorted messages via aggregation pipelines",
+					message: "user not found from session, please login again",
 				},
-				{ status: 500 }
+				{ status: 404 }
 			);
 
+		if ( !user[0] || !user[0]?.messages || user[0]?.messages.length === 0)
+			return Response.json(
+				{
+					success: false,
+					message: "user has no messages to display",
+				},
+				{ status: 404 }
+			);
 		return Response.json(
 			{
 				success: true,
-				message: " user's messages fetched successfully",
+				message: " anonymous messages fetched successfully",
 				messages: user[0].messages,
 			},
 			{ status: 200 }
@@ -54,7 +75,7 @@ export async function GET(req: NextRequest) {
 		return Response.json(
 			{
 				success: false,
-				message: "failed to get user's messages with error : " + error,
+				message: "failed to fetch anonymous messages",
 			},
 			{ status: 500 }
 		);

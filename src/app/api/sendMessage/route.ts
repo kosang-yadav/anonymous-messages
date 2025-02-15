@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
 		return Response.json(
 			{
 				success: false,
-				message: "message's content is missing",
+				message: "please type something to send a message",
 			},
 			{ status: 500 }
 		);

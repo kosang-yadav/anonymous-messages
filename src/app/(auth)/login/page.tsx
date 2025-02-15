@@ -48,13 +48,12 @@ export default function signin() {
 			const response = await signIn("credentials", {
 				...data,
 				redirect: false,
-			})
+			});
 
 			console.log(response);
 
 			if (response?.error) {
-				
-				setpasswordMsg(response.error === "Error: wrong password" ? "wrong password" : "user not found, please sign up");
+				setpasswordMsg(response.error.replace("Error: ", ""));
 				toast({
 					title: "sign in failed",
 					description: response.error,
@@ -62,20 +61,19 @@ export default function signin() {
 				});
 			}
 
-			if(response?.url) {
+			if (response?.url) {
 				toast({
 					title: "success",
 					description: "sign in succesfully",
 				});
-				
-				// router.replace(`/dashboard/${data.identifier}`);
+				router.replace(`/dashboard`);
 			}
 
 			setIsSubmitting(false);
 		} catch (error) {
-
+			console.log(error);
 			toast({
-				title: "sign up failed",
+				title: "sign in failed",
 				description: "something went wrong while signing in",
 				variant: "destructive",
 			});
@@ -102,10 +100,7 @@ export default function signin() {
 								<FormItem>
 									<FormLabel>Username / Email</FormLabel>
 									<FormControl>
-										<Input
-											{...field}
-											name="identifier"
-										/>
+										<Input {...field} name="identifier" />
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -118,8 +113,14 @@ export default function signin() {
 								<FormItem>
 									<FormLabel>Password</FormLabel>
 									<FormControl>
-										<Input type="password" {...field} name="password" />
-										{/* <i><Eye/></i> */}
+										<div>
+											<Input
+												type={showPassword ? "text" : "password"}
+												{...field}
+												name="password"
+											/>
+											<Eye onClick={() => setShowPassword(!showPassword)} />
+										</div>
 									</FormControl>
 									<FormMessage />
 								</FormItem>
