@@ -41,9 +41,9 @@ export async function GET() {
 			},
 			{ status: 200 }
 		);
-	} catch (error: any) {
+	} catch (error) {
 		console.log(error);
-		console.log(error.message, error.error, error.code);
+		// console.log(error.message, error.error, error.code);
 		return Response.json({
 			success : false,
 			message : "something went wrong while suggesting messages, please try later",
@@ -52,8 +52,7 @@ export async function GET() {
 }
 // const { username} = await req.json();
 // hard coded test values
-// const test =
-("What experiences or challenges have shaped your perspective on personal growth in the past year? || How do you define success, and what steps are you taking to achieve it in your life? || In what ways do you think your relationships influence your decision-making processes?");
+// const test = "What experiences or challenges have shaped your perspective on personal growth in the past year? || How do you define success, and what steps are you taking to achieve it in your life? || In what ways do you think your relationships influence your decision-making processes?";
 
 // await dbConnect();
 

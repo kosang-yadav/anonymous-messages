@@ -1,4 +1,5 @@
 import { dbConnect } from "@/lib/dbConnect";
+import { User } from "@/model/user.model";
 import UserModel from "@/model/user.model";
 
 import bcrypt from "bcryptjs";
@@ -14,9 +15,8 @@ export const authOptions: NextAuthOptions = {
 				identifier: { label: "Username/Email", type: "text" },
 				password: { label: "Password", type: "password" },
 			},
-			async authorize(credentials, req): Promise<any> {
+			async authorize(credentials): Promise<User | any> {
 				await dbConnect();
-				let authUser;
 				try {
 					// console.log(credentials);
 
@@ -44,7 +44,7 @@ export const authOptions: NextAuthOptions = {
 					if (!isPasswordCorrect) throw new Error("wrong password");
 
 					return user ;
-				} catch (error: any) {
+				} catch (error: object | any) {
 					console.log(error);
 					throw new Error(error);
 				}

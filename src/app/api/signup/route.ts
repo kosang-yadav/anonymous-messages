@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
 	// console.log(username, email, password);
 
 	try {
-		const { success, data, error } = signUpSchema.safeParse({
+		const { success,  error } = signUpSchema.safeParse({
 			email,
 			username,
 			password,
@@ -152,7 +152,7 @@ export async function POST(request: NextRequest) {
 				status: 500,
 			}
 		);
-	} catch (error: any) {
+	} catch (error) {
 		console.log(error);
 		return Response.json(
 			{

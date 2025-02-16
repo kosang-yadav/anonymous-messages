@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
 	// 	);
 
 	// else if it's coming via body
-	const {acceptsMessage} = await req.json();
+	const { acceptsMessage } = await req.json();
 
 	try {
 		const updatedUser = await UserModel.findByIdAndUpdate(
@@ -83,12 +83,12 @@ export async function POST(req: NextRequest) {
 	}
 }
 
-export async function GET(req: NextRequest) {
+export async function GET() {
 	await dbConnect();
 
 	// const userId = await getUserIdByServerSession();
 	const session = await getServerSession(authOptions);
-	const User = session?.user;
+	// const User = session?.user;
 	// console.log(session);
 
 	try {

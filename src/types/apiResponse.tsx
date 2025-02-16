@@ -6,7 +6,4 @@ export interface apiResponseSchema {
     message : string;
     acceptingMessage? : boolean;
     messages? : Array<Message>;
-    
-    data? : any;                         // required...?
-    error? : any;
 }

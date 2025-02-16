@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { NextRequest } from "next/server";
 
 // import { getUserIdByServerSession } from "../acceptingMessages/route";
 
@@ -8,7 +7,7 @@ import UserModel from "@/model/user.model";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/authOption";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
 	await dbConnect();
 
 	// const id = await getUserIdByServerSession();

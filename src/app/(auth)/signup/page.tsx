@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Eye, Loader2 } from "lucide-react";
+import {  Loader2 } from "lucide-react";
 import Link from "next/link";
 
 export default function Signup() {

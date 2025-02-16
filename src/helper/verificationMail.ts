@@ -30,11 +30,11 @@ export async function sendVerificationMail(
 			message: "mail sent successfully",
 			data,
 		};
-	} catch (error: any) {
+	} catch (error) {
 		return {
 			success: false,
 			statusCode: 500,
-			message: `our send mail function failed with error : ${error.message}`,
+			message: `our send mail function failed`,
 			error,
 		};
 	}

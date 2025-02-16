@@ -57,7 +57,7 @@ export default function Verify() {
 			} else {
 				setMessage(response.data.message);
 			}
-		} catch (error: any) {
+		} catch (error: object | any) {
 			console.log(error);
 			const err = error as AxiosError<apiResponseSchema>;
 			toast({

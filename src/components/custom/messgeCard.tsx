@@ -29,7 +29,6 @@ type MessageCardProps = {
 export const MessageCard = ({
 	message,
 	onDeleteMessage,
-	className,
 }: MessageCardProps) => {
 	const { toast } = useToast();
 	const deleteMessage = async () => {
