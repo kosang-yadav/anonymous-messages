@@ -48,7 +48,7 @@ export default function Home() {
 									>
 										<div className="p-1">
 											<Card className="flex flex-col items-center justify-center aspect-square gap-10">
-												<CardTitle className="text-center  font-bold text-3xl">
+												<CardTitle className="text-center font-bold text-3xl mt-5 mx-4">
 													{message.title}
 												</CardTitle>
 												<CardContent className="flex flex-col items-center gap-5">

@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
 	await dbConnect();
 
 	const { email, code } = await req.json();
-	console.log(email, code);
+	// console.log(email, code);
 
 	const decodedEmail = decodeURIComponent(email);
 

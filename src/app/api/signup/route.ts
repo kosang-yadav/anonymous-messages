@@ -4,7 +4,8 @@ import { signUpSchema } from "@/schema/signUpSchema";
 
 import { NextRequest } from "next/server";
 import bcrypt from "bcryptjs";
-import { sendVerificationMail } from "@/helper/verificationMail";
+// import { sendVerificationMail } from "@/helper/verificationMail";
+import { sendEmail, sendRealEmail } from "@/helper/mailTrapVerificationMail";
 
 export async function POST(request: NextRequest) {
 	await dbConnect();
@@ -58,11 +59,11 @@ export async function POST(request: NextRequest) {
 
 			//when user is found but not verified, then send verification mail &update password and verifyCode
 
-			const mailResponse = await sendVerificationMail(
-				username,
-				email,
-				verifyCode
-			);
+			// const mailResponse = await sendVerificationMail(
+			// 	username,
+			// 	email,
+			// 	verifyCode
+			// );
 
 			// if (!mailResponse.success)
 			// 	return Response.json(
@@ -74,6 +75,27 @@ export async function POST(request: NextRequest) {
 			// 			status: 500,
 			// 		}
 			// 	);
+
+			// console.log(
+			// 	"email : ",
+			// 	email,
+			// 	"username : ",
+			// 	username,
+			// 	"verifyCode : ",
+			// 	verifyCode
+			// );
+			const mailResponse = await sendRealEmail(username, email, verifyCode);
+			// console.log("mailResponse : ", mailResponse);
+			if (!mailResponse)
+				return Response.json(
+					{
+						success: false,
+						message: `failed to send verification mail to ${email}`,
+					},
+					{
+						status: 500,
+					}
+				);
 
 			const updatedUser = await UserModel.updateOne(
 				{ email },
@@ -101,15 +123,29 @@ export async function POST(request: NextRequest) {
 
 		// for new user, send verification mail & insert the user data to db
 
-		const mailResponse = await sendVerificationMail(
-			username,
-			email,
-			verifyCode
-		);
+		// const mailResponse = await sendVerificationMail(
+		// 	username,
+		// 	email,
+		// 	verifyCode
+		// );
 
-		console.log(mailResponse);
+		// console.log(mailResponse);
 
-		if (!mailResponse.success)
+		// if (!mailResponse.success)
+		// 	return Response.json(
+		// 		{
+		// 			success: false,
+		// 			message: `failed to send verification mail to ${email}`,
+		// 		},
+		// 		{
+		// 			status: 500,
+		// 		}
+		// 	);
+
+		// console.log("email : ", email, "username : ", username, "verifyCode : ", verifyCode);
+		const mailResponse = await sendRealEmail(username, email, verifyCode);
+		// console.log("mailResponse : ",mailResponse);
+		if (!mailResponse)
 			return Response.json(
 				{
 					success: false,
@@ -153,7 +189,7 @@ export async function POST(request: NextRequest) {
 			}
 		);
 	} catch (error) {
-		console.log(error);
+		console.log("catch error : ",error);
 		return Response.json(
 			{
 				success: false,
