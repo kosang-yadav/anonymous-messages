@@ -29,6 +29,7 @@ export async function sendVerificationMail(
 			message: "mail sent successfully",
 		};
 	} catch (error) {
+		console.log(error);
 		return {
 			success: false,
 			statusCode: 500,

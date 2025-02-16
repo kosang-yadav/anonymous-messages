@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {  Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
 
 export default function Signup() {
@@ -84,7 +84,7 @@ export default function Signup() {
 				description: response.data.message,
 			});
 
-			if (response.data.success) router.replace(`/verify?email=${data.email}`);
+			if (response.data.success) router.replace(`/verify/${data.email}`);
 
 			setIsSubmitting(false);
 		} catch (error) {

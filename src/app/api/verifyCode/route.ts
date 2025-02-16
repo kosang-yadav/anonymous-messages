@@ -9,10 +9,10 @@ export async function POST(req: NextRequest) {
 	const { email, code } = await req.json();
 	console.log(email, code);
 
-	// const decodedEmail = decodeURIComponent(email);
+	const decodedEmail = decodeURIComponent(email);
 
 	try {
-		const user = await UserModel.findOne({ email });
+		const user = await UserModel.findOne({ email: decodedEmail });
 
 		if (!user)
 			return Response.json(

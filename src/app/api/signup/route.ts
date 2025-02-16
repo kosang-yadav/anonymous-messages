@@ -64,16 +64,16 @@ export async function POST(request: NextRequest) {
 				verifyCode
 			);
 
-			if (!mailResponse.success)
-				return Response.json(
-					{
-						success: false,
-						message: `failed to send verification mail to ${email}`,
-					},
-					{
-						status: 500,
-					}
-				);
+			// if (!mailResponse.success)
+			// 	return Response.json(
+			// 		{
+			// 			success: false,
+			// 			message: `failed to send verification mail to ${email}`,
+			// 		},
+			// 		{
+			// 			status: 500,
+			// 		}
+			// 	);
 
 			const updatedUser = await UserModel.updateOne(
 				{ email },

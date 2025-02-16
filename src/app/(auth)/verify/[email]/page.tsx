@@ -21,24 +21,19 @@ import {
 } from "@/components/ui/form";
 import Link from "next/link";
 import { apiResponseSchema } from "@/types/apiResponse";
-import { Suspense } from "react";
+import { use } from "react";
 
-function Search() {
-	const searchParams = useSearchParams();
-
-	const email = searchParams.get("email");
-	console.log(email);
-
-	return <>{email}</>;
-}
-
-export default function Verify() {
+export default function Verify({
+	params,
+}: {
+	params: Promise<{ email: string }>;
+}) {
 	const [message, setMessage] = useState("");
 	const [isVerifying, setIsVerifying] = useState(false);
 
 	const router = useRouter();
 
-	const searchParams = useSearchParams();
+	const param = use(params);
 
 	const form = useForm<z.infer<typeof codeVerificationSchema>>({
 		resolver: zodResolver(codeVerificationSchema),
@@ -53,7 +48,7 @@ export default function Verify() {
 		setIsVerifying(true);
 		try {
 			const response = await axios.post("/api/verifyCode", {
-				email: searchParams.get("email"),
+				email:param.email,
 				code: data.code,
 			});
 			if (response.data.success) {
@@ -90,9 +85,7 @@ export default function Verify() {
 						Verify your email
 					</h1>
 					<p className="mb-4 text-3xl">
-						<Suspense>
-							Enter the verification code sent to <Search />
-						</Suspense>
+						Enter the verification code sent to your email
 					</p>
 				</div>
 				<Form {...form}>
