@@ -24,11 +24,11 @@ import { Input } from "@/components/ui/input";
 import { Eye, Loader2 } from "lucide-react";
 import Link from "next/link";
 
-export default function signup() {
+export default function Signup() {
 	const router = useRouter();
 	const { toast } = useToast();
 
-	const [showPassword, setShowPassword] = useState(false);
+	// const [showPassword, setShowPassword] = useState(false);
 
 	const [username, setUsername] = useState("");
 	const [isCheckingUsername, setIsCheckingUsername] = useState(false);
@@ -143,8 +143,7 @@ export default function signup() {
 										: "text-red-600"
 								}`}
 							>
-								{" "}
-								{usernameMessage}{" "}
+								{usernameMessage}
 							</p>
 						)}
 						<FormField

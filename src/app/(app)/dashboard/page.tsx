@@ -16,7 +16,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-export default function Page() {
+export default function Dashboard() {
 	const [settingAcceptingMsgs, setSettingAcceptingMsgs] = useState(false);
 	const [fetchingMessages, setFetchingMessages] = useState(false);
 

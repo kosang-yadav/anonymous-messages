@@ -20,7 +20,7 @@ import { use, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-export default function sendMessage({
+export default function Sendmessage({
 	params,
 }: {
 	params: Promise<{ username: string }>;

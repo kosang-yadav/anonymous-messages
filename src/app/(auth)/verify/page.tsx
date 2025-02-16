@@ -22,7 +22,7 @@ import {
 import Link from "next/link";
 import { apiResponseSchema } from "@/types/apiResponse";
 
-export default function verify() {
+export default function Verify() {
 	const [message, setMessage] = useState("");
 	const [isVerifying, setIsVerifying] = useState(false);
 
