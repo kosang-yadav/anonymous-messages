@@ -43,8 +43,8 @@ export const authOptions: NextAuthOptions = {
 
 					if (!isPasswordCorrect) throw new Error("wrong password");
 
-					return user ;
-				} catch (error: object | any) {
+					return user;
+				} catch (error: any) {
 					console.log(error);
 					throw new Error(error);
 				}

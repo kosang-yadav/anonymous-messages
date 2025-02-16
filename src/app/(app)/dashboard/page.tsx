@@ -55,7 +55,7 @@ export default function Dashboard() {
 				});
 
 			setValue("acceptMessages", response.data.acceptingMessages);
-		} catch (error: object | any) {
+		} catch (error: any) {
 			const err = error as AxiosError<apiResponseSchema>;
 			toast({
 				title: "failed",
@@ -67,7 +67,7 @@ export default function Dashboard() {
 		} finally {
 			setSettingAcceptingMsgs(false);
 		}
-	}, [setValue]);
+	}, [setValue, toast]);
 	const fetchMessages = useCallback(
 		async (refresh: boolean = false) => {
 			setFetchingMessages(true);
@@ -91,7 +91,7 @@ export default function Dashboard() {
 				}
 
 				setMessages(response.data.messages);
-			} catch (error: object | any) {
+			} catch (error: any) {
 				const err = error as AxiosError<apiResponseSchema>;
 				toast({
 					title: "failed",
@@ -106,7 +106,7 @@ export default function Dashboard() {
 				setSettingAcceptingMsgs(false);
 			}
 		},
-		[messages, setMessages]
+		[messages, setMessages, toast]
 	);
 
 	useEffect(() => {
@@ -142,7 +142,7 @@ export default function Dashboard() {
 					response?.data.message ??
 					"message acceptance status updated successfully",
 			});
-		} catch (error: object | any) {
+		} catch (error: any) {
 			const err = error as AxiosError<apiResponseSchema>;
 			toast({
 				title: "failed",

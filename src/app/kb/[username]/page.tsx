@@ -66,7 +66,7 @@ export default function Sendmessage({
 			} else {
 				setMessage(response.data.message);
 			}
-		} catch (error: object | any) {
+		} catch (error: any) {
 			console.log(error);
 			const err = error as AxiosError<apiResponseSchema>;
 			toast({
@@ -118,7 +118,7 @@ export default function Sendmessage({
 				});
 				setSuggestMessage(response.data.message);
 			}
-		} catch (error: object | any) {
+		} catch (error: any) {
 			console.log(error);
 			const err = error as AxiosError<apiResponseSchema>;
 			toast({
