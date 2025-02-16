@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
 			return Response.json(
 				{
 					success: false,
-					message: "user is not accepting messages now",
+					message: `@${username} is not accepting messages now`,
 				},
 				{ status: 500 }
 			);

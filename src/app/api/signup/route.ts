@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
 
 		const verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
 
-		const verifyCodeExpiry = new Date();
+		// const verifyCodeExpiry = new Date();
 		// verifyCodeExpiry = verifyCodeExpiry.setHours( verifyCodeExpiry.getHours() + 1 );
 
 		const user = await UserModel.findOne({ email }).select("password");
@@ -58,22 +58,22 @@ export async function POST(request: NextRequest) {
 
 			//when user is found but not verified, then send verification mail &update password and verifyCode
 
-			// const mailResponse = await sendVerificationMail(
-			// 	username,
-			// 	email,
-			// 	verifyCode
-			// );
+			const mailResponse = await sendVerificationMail(
+				username,
+				email,
+				verifyCode
+			);
 
-			// if (!mailResponse.success)
-			// 	return Response.json(
-			// 		{
-			// 			success: false,
-			// 			message: `failed to send verification mail to ${email}`,
-			// 		},
-			// 		{
-			// 			status: 500,
-			// 		}
-			// 	);
+			if (!mailResponse.success)
+				return Response.json(
+					{
+						success: false,
+						message: `failed to send verification mail to ${email}`,
+					},
+					{
+						status: 500,
+					}
+				);
 
 			const updatedUser = await UserModel.updateOne(
 				{ email },
@@ -101,19 +101,24 @@ export async function POST(request: NextRequest) {
 
 		// for new user, send verification mail & insert the user data to db
 
-		// const mailResponse = await sendVerificationMail(
-		// 	username,
-		// 	email,
-		// 	verifyCode
-		// );
+		const mailResponse = await sendVerificationMail(
+			username,
+			email,
+			verifyCode
+		);
 
-		// if (!mailResponse.success)
-		// 	return Response.json({
-		// 		success: false,
-		// 		message: `failed to send verification mail to ${email}`,
-		// 	},{
-		// 		status: 500,
-		// 	});
+		console.log(mailResponse);
+
+		if (!mailResponse.success)
+			return Response.json(
+				{
+					success: false,
+					message: `failed to send verification mail to ${email}`,
+				},
+				{
+					status: 500,
+				}
+			);
 
 		const newUser = await UserModel.insertOne({
 			username,
@@ -122,7 +127,7 @@ export async function POST(request: NextRequest) {
 			isAcceptingMessages: true,
 			isVerified: false,
 			verifyCode,
-			verifyCodeExpiry,
+			verifyCodeExpiry: Date.now() + 3600000,
 			messages: [],
 		});
 

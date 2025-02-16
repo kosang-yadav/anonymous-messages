@@ -50,7 +50,7 @@ export default function signin() {
 				redirect: false,
 			});
 
-			console.log(response);
+			// console.log(response);
 
 			if (response?.error) {
 				setpasswordMsg(response.error.replace("Error: ", ""));

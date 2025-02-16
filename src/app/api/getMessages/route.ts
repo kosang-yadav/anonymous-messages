@@ -54,19 +54,19 @@ export async function GET(req: NextRequest) {
 				{ status: 404 }
 			);
 
-		if ( !user[0] || !user[0]?.messages || user[0]?.messages.length === 0)
-			return Response.json(
-				{
-					success: false,
-					message: "user has no messages to display",
-				},
-				{ status: 404 }
-			);
+		// if ( !user[0] || !user[0]?.messages || user[0]?.messages.length === 0)
+		// 	return Response.json(
+		// 		{
+		// 			success: false,
+		// 			message: "user has no messages to display",
+		// 		},
+		// 		{ status: 404 }
+		// 	);
 		return Response.json(
 			{
 				success: true,
 				message: " anonymous messages fetched successfully",
-				messages: user[0].messages,
+				messages: user[0]?.messages,
 			},
 			{ status: 200 }
 		);

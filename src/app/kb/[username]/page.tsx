@@ -51,12 +51,12 @@ export default function sendMessage({
 		setMessage("");
 		setIsSending(true);
 		try {
-			console.log(param.username, data.content);
+			// console.log(param.username, data.content);
 			const response = await axios.post("../../api/sendMessage", {
 				username: param.username,
 				content: data.content,
 			});
-			console.log(response);
+			// console.log(response);
 			if (response.data.success) {
 				setMessage(response.data.message + ` to ${param.username}.`);
 				toast({
@@ -88,26 +88,33 @@ export default function sendMessage({
 	}
 
 	async function messageSuggester() {
-		setSuggestions([]);
 		setSuggestMessage("");
 		setIsSuggesting(true);
 		try {
 			const response = await axios.get("../../api/suggestMessages");
 
-			console.log(response.data.questions);
-			console.log(response.data.questions.split(" || "));
+			// console.log(response.data.questions);
+			// console.log(response.data.questions.split(" || "));
 
-			setSuggestions(response.data.questions.split(" || "));
+			setSuggestMessage(response.data.message);
 
-			if (response.data.success) {
+			if (response.data.success && response.data.questions) {
+				setSuggestions(response.data.questions.split(" || "));
 				toast({
 					title: "success",
 					description: response.data.message,
 				});
+			} else if (response.data.success) {
+				toast({
+					title: "pending",
+					description: response.data.message ?? "something went wrong",
+				});
+				setSuggestMessage(response.data.message);
 			} else {
 				toast({
 					title: "failed",
-					description: response.data.message,
+					description: response.data.message ?? "something went wrong",
+					variant: "destructive",
 				});
 				setSuggestMessage(response.data.message);
 			}
@@ -196,7 +203,13 @@ export default function sendMessage({
 							"Suggest Messages"
 						)}
 					</Button>
-					{suggestMessage && <p className="text-red-500">{suggestMessage}</p>}
+					{suggestMessage && (
+						<p
+							className={`${suggestMessage === `messages suggested successfully.` ? "text-green-500" : "text-red-500"}`}
+						>
+							{suggestMessage}
+						</p>
+					)}
 					<h2 className="my-3">Click on any message below to select it.</h2>
 					<div className="flex flex-col gap-6 shadow-md rounded-lg border	 pt-4 p-8">
 						<h1 className=" text-2xl font-bold">Messages</h1>

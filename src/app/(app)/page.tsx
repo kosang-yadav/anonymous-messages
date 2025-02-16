@@ -19,7 +19,6 @@ export default function Home() {
 
 	return (
 		<>
-		
 			<div className="min-h-[calc(100vh-88px)] flex flex-col justify-between">
 				{/* Main content */}
 				<main className="flex-grow flex flex-col items-center justify-center px-4 md:px-24 py-12 text-gray-800 ">
@@ -43,8 +42,9 @@ export default function Home() {
 								{messages.map((message, index) => (
 									<CarouselItem
 										key={index}
-										className="md:basis-1/2"
-										// lg:basis-1/3
+										className="md:basis-1/2
+										lg:basis-1/3
+										"
 									>
 										<div className="p-1">
 											<Card className="flex flex-col items-center justify-center aspect-square gap-10">
@@ -52,8 +52,11 @@ export default function Home() {
 													{message.title}
 												</CardTitle>
 												<CardContent className="flex flex-col items-center gap-5">
-													<span className="text-2xl text-center font-semibold ">
+													<span className="text-xl text-center font-semibold ">
 														{message.content}
+													</span>
+													<span className="text-xl text-center font-semibold ">
+														{message.extra_content}
 													</span>
 													<span>{message.received}</span>
 												</CardContent>
@@ -70,7 +73,7 @@ export default function Home() {
 
 				{/* Footer */}
 				<footer className=" text-center p-4 md:p-6 bg-gray-900 text-white">
-					© 2023 True Feedback. All rights reserved.
+					© 2025 BaKa. All rights reserved.
 				</footer>
 			</div>
 		</>

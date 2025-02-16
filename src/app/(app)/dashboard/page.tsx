@@ -183,7 +183,7 @@ export default function dashboard() {
 					/>
 					<button
 						onClick={copyToClipboard}
-						className="shadow-md rounded-lg bg-blue-500 hover:bg-gray-100 text-white border p-3 text-wrap"
+						className="shadow-md rounded-lg bg-blue-500 hover:bg-blue-700 text-white border p-3 text-wrap"
 					>
 						Copy
 					</button>
@@ -217,7 +217,7 @@ export default function dashboard() {
 				)}
 			</Button>
 			<div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
-				{messages.length > 0 ? (
+				{messages?.length > 0 ? (
 					messages.map((message: Message) => (
 						// console.log(message),
 						<MessageCard

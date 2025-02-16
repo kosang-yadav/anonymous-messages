@@ -13,6 +13,7 @@ export interface User extends Document {
 	isVerified: boolean;
 	verifyCode: string;
 	verifyCodeExpiry: Date;
+	suggestMessages: Date;
 	messages: Message[];
 	createdAt: Date;
 }
@@ -51,6 +52,10 @@ const Userschema: Schema<User> = new Schema(
 		},
 		verifyCode: String,
 		verifyCodeExpiry: {
+			type: Date,
+			default: Date.now,
+		},
+		suggestMessages: {
 			type: Date,
 			default: Date.now,
 		},
