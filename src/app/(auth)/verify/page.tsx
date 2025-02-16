@@ -29,7 +29,6 @@ export default function Verify() {
 	const router = useRouter();
 
 	const searchParams = useSearchParams();
-	const email = searchParams.get("email");
 
 	const form = useForm<z.infer<typeof codeVerificationSchema>>({
 		resolver: zodResolver(codeVerificationSchema),
@@ -44,7 +43,7 @@ export default function Verify() {
 		setIsVerifying(true);
 		try {
 			const response = await axios.post("/api/verifyCode", {
-				email,
+				email: searchParams.get("email"),
 				code: data.code,
 			});
 			if (response.data.success) {
