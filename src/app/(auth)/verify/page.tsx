@@ -21,6 +21,16 @@ import {
 } from "@/components/ui/form";
 import Link from "next/link";
 import { apiResponseSchema } from "@/types/apiResponse";
+import { Suspense } from "react";
+
+function Search() {
+	const searchParams = useSearchParams();
+
+	const email = searchParams.get("email");
+	console.log(email);
+
+	return <>{email}</>;
+}
 
 export default function Verify() {
 	const [message, setMessage] = useState("");
@@ -80,7 +90,9 @@ export default function Verify() {
 						Verify your email
 					</h1>
 					<p className="mb-4 text-3xl">
-						Enter the verification code sent to your email
+						<Suspense>
+							Enter the verification code sent to <Search />
+						</Suspense>
 					</p>
 				</div>
 				<Form {...form}>
