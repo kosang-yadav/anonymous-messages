@@ -19,8 +19,7 @@ export async function sendVerificationMail(
 			return {
 				success: false,
 				statusCode: 500,
-				message: `resend's send mail function failed to email with error : ${error.message}`,
-				error,
+				message: `resend's send mail function failed to email`,
 			};
 		}
 
@@ -28,14 +27,12 @@ export async function sendVerificationMail(
 			success: true,
 			statusCode: 200,
 			message: "mail sent successfully",
-			data,
 		};
 	} catch (error) {
 		return {
 			success: false,
 			statusCode: 500,
 			message: `our send mail function failed`,
-			error,
 		};
 	}
 }
