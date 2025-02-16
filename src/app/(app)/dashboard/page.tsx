@@ -2,7 +2,6 @@
 
 import { MessageCard } from "@/components/custom/messgeCard";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
@@ -28,7 +27,8 @@ export default function dashboard() {
 	const { data: session } = useSession();
 
 	const onDeleteMessage = async (messageId: string) => {
-		messages.filter((msg: Message) => msg._id !== messageId);
+		// console.log(messageId);
+		setMessages(messages.filter((msg: Message) => msg._id !== messageId));
 		toast({
 			title: "success",
 			description: "message deleted successfully",
@@ -96,8 +96,9 @@ export default function dashboard() {
 				toast({
 					title: "failed",
 					description:
-						(err.response?.data.message || error.message) ??
-						"failed to fetch messages, please check your network connection",
+						(err.response?.data.message || error.message) == "Network Error"
+							? "failed to fetch messages, please check your internet connection"
+							: err.response?.data.message || error.message,
 					variant: "destructive",
 				});
 			} finally {
@@ -169,7 +170,7 @@ export default function dashboard() {
 	};
 
 	return (
-		<div className="my-8 mx-4 md:mx-8 lg:mx-auto p-6 bg-white rounded w-full max-w-6xl">
+		<div className="my-8 mx-4 md:mx-auto p-6 bg-white rounded w-full max-w-6xl">
 			<h1 className="text-4xl font-bold mb-4">User Dashboard</h1>
 			<div className="mb-4">
 				<h2 className="text-lg font-semibold mb-2">Copy Your Unique Link</h2>
@@ -180,7 +181,12 @@ export default function dashboard() {
 						value={URL}
 						className="input input-bordered w-full p-2 mr-2 w-full"
 					/>
-					<button onClick={copyToClipboard}>Copy</button>
+					<button
+						onClick={copyToClipboard}
+						className="shadow-md rounded-lg bg-blue-500 hover:bg-gray-100 text-white border p-3 text-wrap"
+					>
+						Copy
+					</button>
 				</div>
 			</div>
 			<div className="mb-4">
@@ -213,6 +219,7 @@ export default function dashboard() {
 			<div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
 				{messages.length > 0 ? (
 					messages.map((message: Message) => (
+						// console.log(message),
 						<MessageCard
 							key={message._id as string}
 							message={message}

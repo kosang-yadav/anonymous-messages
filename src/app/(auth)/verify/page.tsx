@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Loader2 } from "lucide-react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -20,6 +20,7 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import Link from "next/link";
+import { apiResponseSchema } from "@/types/apiResponse";
 
 export default function verify() {
 	const [message, setMessage] = useState("");
@@ -34,13 +35,18 @@ export default function verify() {
 		resolver: zodResolver(codeVerificationSchema),
 		defaultValues: {
 			code: "",
-		}
+		},
 	});
 
-	async function verificationHandler(data: z.infer<typeof codeVerificationSchema>) {
+	async function verificationHandler(
+		data: z.infer<typeof codeVerificationSchema>
+	) {
 		setIsVerifying(true);
 		try {
-			const response = await axios.post("/api/verifyCode", { email, code : data.code });
+			const response = await axios.post("/api/verifyCode", {
+				email,
+				code: data.code,
+			});
 			if (response.data.success) {
 				setMessage(response.data.message);
 				toast({
@@ -52,12 +58,20 @@ export default function verify() {
 				setMessage(response.data.message);
 			}
 		} catch (error: any) {
-			// console.log(error);
-			setMessage(error.response.data.message);
+			console.log(error);
+			const err = error as AxiosError<apiResponseSchema>;
+			toast({
+				title: "failed",
+				description:
+					(err.response?.data.message || error.message) ??
+					"failed to fetch messages, please check your network connection",
+				variant: "destructive",
+			});
+			setMessage(err?.message);
 		} finally {
 			setIsVerifying(false);
 		}
-	};
+	}
 
 	return (
 		<div className="flex justify-center items-center min-h-screen bg-gray-800">

@@ -34,7 +34,10 @@ export const MessageCard = ({
 	const { toast } = useToast();
 	const deleteMessage = async () => {
 		try {
-			const response = await axios.delete(`/api/deleteMessage/${message._id}`);
+			// const response = await axios.delete(`/api/deleteMessage/${message._id}`);
+			const response = await axios.delete("/api/deleteMessage", {
+				data: { messageId: message._id },
+			});
 
 			if (response.data.success) {
 				toast({

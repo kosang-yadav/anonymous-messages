@@ -18,7 +18,7 @@ export const Navbar = () => {
 				<a href="#" className="text-xl font-bold mb-4 md:mb-0">
 					anonymous messages
 				</a>
-				<span>Welcome back, <span className="font-bold text-xl">{user?.username || session?.user?.email}</span></span>
+				<span>Welcome back, <span className="font-bold text-xl">{user?.username || session?.user?.email || "friend"}</span></span>
 				{session ? (
 					<Button
 						onClick={() => signOut()}
