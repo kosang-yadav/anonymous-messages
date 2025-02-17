@@ -3,7 +3,7 @@
 import { signInSchema } from "@/schema/signInSchema";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -39,6 +39,11 @@ export default function Signin() {
 			password: "",
 		},
 	});
+
+	useEffect(() => {
+		console.log(window.location.href);
+		console.log(window.location.pathname);
+	},[isSubmitting])
 
 	async function onSubmit(data: z.infer<typeof signInSchema>) {
 		setIsSubmitting(true);
