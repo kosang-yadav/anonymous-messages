@@ -84,7 +84,7 @@ export default function Signup() {
 				description: response.data.message,
 			});
 
-			if (response.data.success) router.replace(`/verify/${data.email}`);
+			if (response.data.success) router.push(`/verify/${data.email}`);
 
 			setIsSubmitting(false);
 		} catch (error) {

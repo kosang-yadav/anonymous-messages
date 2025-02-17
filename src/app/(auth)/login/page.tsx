@@ -71,7 +71,7 @@ export default function Signin() {
 					title: "success",
 					description: "sign in succesfully",
 				});
-				router.replace(`/dashboard`);
+				router.push(`/dashboard`);
 			}
 
 			setIsSubmitting(false);

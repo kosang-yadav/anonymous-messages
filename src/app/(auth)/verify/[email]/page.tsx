@@ -57,7 +57,7 @@ export default function Verify({
 					title: "verification successful.",
 					description: response.data.message,
 				});
-				router.replace("/login");
+				router.push("/login");
 			} else {
 				setMessage(response.data.message);
 			}
