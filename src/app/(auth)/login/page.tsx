@@ -40,11 +40,6 @@ export default function Signin() {
 		},
 	});
 
-	useEffect(() => {
-		console.log(window.location.href);
-		console.log(window.location.pathname);
-	},[isSubmitting])
-
 	async function onSubmit(data: z.infer<typeof signInSchema>) {
 		setIsSubmitting(true);
 		setpasswordMsg("");
