@@ -31,7 +31,7 @@ export const authOptions: NextAuthOptions = {
 					});
 					// console.log(user);
 					if (!user)
-						throw new Error(" no user found with this email, please sign up");
+						throw new Error("no user found with this username or email, please sign up");
 
 					if (!user.isVerified)
 						throw new Error("please verify the email to login");
